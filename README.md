@@ -1,4 +1,4 @@
-TBXML (mmasashi)
+sqliteToCsv
 ============================
 
 This scirpt exports a sqlite file to csv files.
