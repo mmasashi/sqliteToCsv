@@ -30,7 +30,7 @@ usage() {
 # sqlite path
 SQLITE_PATH=""
 if [ "$1" != "" ]; then
-  SQLITE_PATH=$1
+  SQLITE_PATH="$1"
 else
   usage
 fi
@@ -38,22 +38,22 @@ fi
 # output directory
 OUTPUT_DIR="output"
 if [ "$2" != "" ]; then
-  OUTPUT_DIR=$2
+  OUTPUT_DIR="$2"
 fi
-mkdir -p $OUTPUT_DIR
+mkdir -p "$OUTPUT_DIR"
 
 
 ###### sqlite to csv
-for TARGET in `sqlite3 $SQLITE_PATH ".tables"`
+for TARGET in `sqlite3 "$SQLITE_PATH" ".tables"`
 do
   OUTPUT_FILE="$OUTPUT_DIR/$TARGET.csv"
 
-  DATA_NUM=`sqlite3 $SQLITE_PATH "select count(*) from $TARGET"`
+  DATA_NUM=`sqlite3 "$SQLITE_PATH" "select count(*) from $TARGET"`
   if [ $DATA_NUM -lt 1 ]; then
     echo "Table:$TARGET DataNum:${DATA_NUM}"
     echo "No data" > $OUTPUT_FILE
   else
-    CLM_NUM=`sqlite3 -header $SQLITE_PATH "select * from $TARGET" \
+    CLM_NUM=`sqlite3 -header "$SQLITE_PATH" "select * from $TARGET" \
             | awk 'BEGIN{FS="|"}{if (NR==1) print NF}'`
     echo "Table:$TARGET DataNum:${DATA_NUM} \
 ColNum:${CLM_NUM}"
@@ -66,7 +66,7 @@ ColNum:${CLM_NUM}"
       do
         ORDER_RULE="${ORDER_RULE},$a"
       done
-      sqlite3 -header -separator "," $SQLITE_PATH "select * from $TARGET \
+      sqlite3 -header -separator "," "$SQLITE_PATH" "select * from $TARGET \
 order by $ORDER_RULE" > $OUTPUT_FILE
     fi
   fi
